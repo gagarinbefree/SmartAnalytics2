@@ -53,27 +53,7 @@ module.exports = (env) => {
                 // Plugins that apply in production builds only
                 new webpack.optimize.UglifyJsPlugin()
             ])
-    });
-
-    // Configuration for server-side (prerendering) bundle suitable for running in Node
-    //const serverBundleConfig = merge(sharedConfig(), {
-    //    resolve: { mainFields: ['main'] },
-    //    entry: { 'main-server': './ClientApp/boot-server.tsx' },
-    //    plugins: [
-    //        new webpack.DllReferencePlugin({
-    //            context: __dirname,
-    //            manifest: require('./ClientApp/dist/vendor-manifest.json'),
-    //            sourceType: 'commonjs2',
-    //            name: './vendor'
-    //        })
-    //    ],
-    //    output: {
-    //        libraryTarget: 'commonjs',
-    //        path: path.join(__dirname, './ClientApp/dist')
-    //    },
-    //    target: 'node',
-    //    devtool: 'inline-source-map'
-    //});
+    });    
 
     return [clientBundleConfig];
 };
