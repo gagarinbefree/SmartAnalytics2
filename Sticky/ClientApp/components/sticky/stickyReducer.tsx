@@ -7,9 +7,9 @@ import {
     STICKY_TITLE_CHANGE,
     STICKY_NOTE_CHANGE,
     STICKY_SAVE_STICKER,
-    STICKY_UPDATE_STICKER} from "./stickyConstants";
+    STICKY_UPDATE_STICKER,    STICKY_LOAD_STICKERS} from "./stickyConstants";
 import { Action, Reducer } from 'redux';
-import { IAddStickerAction, ISetStickerPositionAction, IStickerAction, ITextChangeStickerAction, IDbStickerAction } from "./stickyActions";
+import { IAddStickerAction, ISetStickerPositionAction, IStickerAction, ITextChangeStickerAction, IDbStickerAction, IDbStickersAction } from "./stickyActions";
 import { ISticker } from "../sticker/sticker";
 import { getCardColor } from "../common";
 
@@ -129,7 +129,28 @@ export const stickyReducer: Reducer<IStickyState> = (state: IStickyState = inita
         }
 
         return res;
-    }  
+    }
+    else if (incomingAction.type == STICKY_LOAD_STICKERS) {
+        const action = incomingAction as IDbStickersAction;
+
+        let res: IStickyState = deepCopy(state);
+
+        action.stickers.forEach((sticker: ISticker, index: number) => {
+            res.payload.stickers.push({
+                index: sticker.index,
+                id: sticker.id,
+                date: sticker.date,
+                x: sticker.x,
+                y: sticker.y,
+                title: sticker.title,
+                note: sticker.note,
+                color: sticker.color,
+                issaved: true
+            });
+        });
+        
+        return res;
+    }
     else
         return state;
 }

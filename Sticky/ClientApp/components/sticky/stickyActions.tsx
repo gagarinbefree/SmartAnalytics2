@@ -43,6 +43,11 @@ export interface IDbStickerAction {
     sticker: ISticker
 }
 
+export interface IDbStickersAction {
+    type: string,
+    stickers: ISticker[]
+}
+
 export function addSticker(index: number, top: number): Function {
     return (dispatch: Dispatch<IAddStickerAction>): void => {        
         dispatch({ type: STICKY_ADD_STICKER, index: index, top: top });
@@ -124,6 +129,20 @@ export function saveSticker(sticker: ISticker): Function {
         }
         catch (e) {
             console.error(e);    
+        }
+    }
+}
+
+export function loadStickers(): Function {
+    return async (dispatch: Dispatch<IDbStickersAction>): Promise<void> => {
+        try {
+            let request: any = await fetch('/api/stickers/', { method: 'GET' });
+            let res: ISticker[] = await request.json();
+
+            dispatch({ type: STICKY_LOAD_STICKERS, stickers: res });
+        }
+        catch (e) {
+            console.error(e);
         }
     }
 }

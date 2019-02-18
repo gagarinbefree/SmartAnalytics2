@@ -15,6 +15,7 @@ import Delete from '@material-ui/icons/Delete';
 import CloudDone from '@material-ui/icons/CloudDone';
 import TextareaAutosize from 'react-textarea-autosize';
 import SaveIcon from '@material-ui/icons/Save';
+import * as moment from 'moment';
 
 export interface ISticker {
     index: number,
@@ -113,7 +114,7 @@ export class Sticker extends React.Component<IStickerProps> {
                             {this.props.sticker.index}
                         </Avatar>
                     }
-                    title={this.props.sticker.date.toLocaleString()}
+                    title={moment(sticker.date).format('DD.MM.YYYY HH:mm')}
                 />
                 <CardContent>
                     <Typography component="p">
@@ -127,12 +128,14 @@ export class Sticker extends React.Component<IStickerProps> {
                             }}
                             autoFocus={true}
                             onChange={this.textFieldOnChangeHandler.bind(this)}
+                            defaultValue={sticker.title}
                         />
                     </Typography>
                     <Typography component="p">
                         <TextareaAutosize minRows={5}
                             className={classes.area}
                             onChange={this.textareaOnChangeHandler.bind(this)}
+                            defaultValue={sticker.note}
                         />
                     </Typography>
                 </CardContent>

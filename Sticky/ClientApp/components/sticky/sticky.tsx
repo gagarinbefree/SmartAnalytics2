@@ -24,12 +24,14 @@ export interface IStickyProps {
     changeStickerTitle(index: number, text: string): void;
     changeStickerNote(index: number, text: string): void;
     saveSticker(sticker: ISticker): void;
+    loadStickers(): void;
 }
 
 export class Sticky extends React.Component<ISticky & IStickyProps> {
     constructor(props: any) {
-        super(props);
+        super(props);        
     }
+    
 
     render(): JSX.Element {
         return <div>
@@ -51,10 +53,8 @@ export class Sticky extends React.Component<ISticky & IStickyProps> {
         </div>
     }
 
-    componentDidMount() {
-        this.props.stickers.map((s: ISticker) => {
-            console.log(s.date);
-        });
+    async componentDidMount(): Promise<void> {
+        await this.props.loadStickers();
     }
 
     addButtonClickHandler(): void {
@@ -76,7 +76,8 @@ let mapDispatchToProps = (dispatch: any): IStickyProps => {
         deleteSticker: async (sticker: ISticker): Promise<void> => dispatch(Actions.deleteSticker(sticker)),
         changeStickerTitle: (index: number, text: string): void => dispatch(Actions.changeStickerTitle(index, text)),
         changeStickerNote: (index: number, text: string): void => dispatch(Actions.changeStickerNote(index, text)),
-        saveSticker: async (sticker: ISticker): Promise<void> => dispatch(Actions.saveSticker(sticker))
+        saveSticker: async (sticker: ISticker): Promise<void> => dispatch(Actions.saveSticker(sticker)),
+        loadStickers: async (): Promise<void> => dispatch(Actions.loadStickers())
     }
 }
 
