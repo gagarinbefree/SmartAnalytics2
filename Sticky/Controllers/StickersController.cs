@@ -24,7 +24,9 @@ namespace Sticky.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sticker>>> GetSticker()
         {
-            return await _context.Sticker.ToListAsync();
+            var stickers = await _context.Sticker.ToListAsync();
+
+            return stickers;
         }
 
         // GET: api/stickers/5

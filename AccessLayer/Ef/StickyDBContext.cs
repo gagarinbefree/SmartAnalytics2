@@ -33,7 +33,7 @@ namespace AccessLayer.Ef
                     .IsRequired()
                     .HasColumnName("color")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(true);
 
                 entity.Property(e => e.Date)
                     .HasColumnName("date")
@@ -44,12 +44,12 @@ namespace AccessLayer.Ef
                 entity.Property(e => e.Note)
                     .HasColumnName("note")
                     .HasMaxLength(1024)
-                    .IsUnicode(false);
+                    .IsUnicode(true);
 
                 entity.Property(e => e.Title)
                     .HasColumnName("title")
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true);
 
                 entity.Property(e => e.X).HasColumnName("x");
 
