@@ -37,47 +37,8 @@ export const stickyReducer: Reducer<IStickyState> = (state: IStickyState = initS
                 color: getCardColor(),
                 issaved: false
             });
-
-
-            ////let res: IStickyState = deepCopy(state);
-
-            //let res: IStickyState = {
-            //    ...state,
-            //    payload: {
-            //        stickers: [state.payload.stickers, {
-            //            index: action.index,
-            //            id: 0,
-            //            date: new Date(),
-            //            x: 0,
-            //            y: action.top,
-            //            title: '',
-            //            note: '',
-            //            color: getCardColor(),
-            //            issaved: false
-            //        }]
-            //    }
-
-
-            //        sickers: [state.payload.stickers, {}]
-
-            //}
-
-
-
-            //    index: action.index,
-            //    id: 0,
-            //    date: new Date(),
-            //    x: 0, 
-            //    y: action.top,
-            //    title: '',
-            //    note: '',
-            //    color: getCardColor(),
-            //    issaved: false
-            //}
-
-            return state;
         }
-        else if (inAction.type == STICKY_SET_STICKER_POSITION) {
+        /*else if (inAction.type == STICKY_SET_STICKER_POSITION) {
             const action = inAction as ISetStickerPositionAction;
 
             let res: IStickyState = deepCopy(state);
@@ -187,9 +148,9 @@ export const stickyReducer: Reducer<IStickyState> = (state: IStickyState = initS
             });
         
             return res;
-        }
-        else
-            return state;
+        }*/
+        //else
+        //    return state;
     }
 );
 
