@@ -38,117 +38,119 @@ export const stickyReducer: Reducer<IStickyState> = (state: IStickyState = initS
                 issaved: false
             });
         }
-        /*else if (inAction.type == STICKY_SET_STICKER_POSITION) {
-            const action = inAction as ISetStickerPositionAction;
+        //else if (inAction.type == STICKY_SET_STICKER_POSITION) {
+        //    const action = inAction as ISetStickerPositionAction;
 
-            let res: IStickyState = deepCopy(state);
+        //    draft.payload.stickers
 
-            let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
-            if (sticker) {
-                sticker.x = action.pos.x;
-                sticker.y = action.pos.y;
-                sticker.issaved = false;
-            }
+        //    let res: IStickyState = deepCopy(state);
 
-            return res;
-        }
-        else if (inAction.type == STICKY_CHANGE_STICKER_COLOR) {
-            const action = inAction as IStickerAction;
+        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
+        //    if (sticker) {
+        //        sticker.x = action.pos.x;
+        //        sticker.y = action.pos.y;
+        //        sticker.issaved = false;
+        //    }
 
-            let res: IStickyState = deepCopy(state);
+        //    return res;
+        //}
+        //else if (inAction.type == STICKY_CHANGE_STICKER_COLOR) {
+        //    const action = inAction as IStickerAction;
 
-            let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
-            if (sticker) {
-                sticker.color = getCardColor(sticker.color);
-                sticker.issaved = false;
-            }
+        //    let res: IStickyState = deepCopy(state);
 
-            return res;
-        }
-        else if (inAction.type == STICKY_DELETE_STICKER) {
-            const action = inAction as IDbStickerAction;
+        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
+        //    if (sticker) {
+        //        sticker.color = getCardColor(sticker.color);
+        //        sticker.issaved = false;
+        //    }
 
-            let res: IStickyState = deepCopy(state);
+        //    return res;
+        //}
+        //else if (inAction.type == STICKY_DELETE_STICKER) {
+        //    const action = inAction as IDbStickerAction;
 
-            let ii: number = res.payload.stickers.findIndex(item => item.index == action.sticker.index);
-            if (ii >= 0) {
-                res.payload.stickers.splice(ii, 1);          
-            } 
+        //    let res: IStickyState = deepCopy(state);
 
-            return res;
-        }
-        else if (inAction.type == STICKY_TITLE_CHANGE) {
-            const action = inAction as ITextChangeStickerAction;
+        //    let ii: number = res.payload.stickers.findIndex(item => item.index == action.sticker.index);
+        //    if (ii >= 0) {
+        //        res.payload.stickers.splice(ii, 1);          
+        //    } 
 
-            let res: IStickyState = deepCopy(state);
+        //    return res;
+        //}
+        //else if (inAction.type == STICKY_TITLE_CHANGE) {
+        //    const action = inAction as ITextChangeStickerAction;
 
-            let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
-            if (sticker) {
-                sticker.title = action.text;
-                sticker.issaved = false;
-            }
+        //    let res: IStickyState = deepCopy(state);
 
-            return res;
-        }
-        else if (inAction.type == STICKY_NOTE_CHANGE) {
-            const action = inAction as ITextChangeStickerAction;
+        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
+        //    if (sticker) {
+        //        sticker.title = action.text;
+        //        sticker.issaved = false;
+        //    }
 
-            let res: IStickyState = deepCopy(state);
+        //    return res;
+        //}
+        //else if (inAction.type == STICKY_NOTE_CHANGE) {
+        //    const action = inAction as ITextChangeStickerAction;
 
-            let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
-            if (sticker) {
-                sticker.note = action.text;
-                sticker.issaved = false;
-            }
+        //    let res: IStickyState = deepCopy(state);
 
-            return res;
-        }
-        else if (inAction.type == STICKY_SAVE_STICKER) {
-            const action = inAction as IDbStickerAction;
+        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
+        //    if (sticker) {
+        //        sticker.note = action.text;
+        //        sticker.issaved = false;
+        //    }
 
-            let res: IStickyState = deepCopy(state);
+        //    return res;
+        //}
+        //else if (inAction.type == STICKY_SAVE_STICKER) {
+        //    const action = inAction as IDbStickerAction;
 
-            let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.sticker.index);
-            if (sticker) {
-                sticker.id = action.sticker.id;
-                sticker.issaved = true;
-            }
+        //    let res: IStickyState = deepCopy(state);
 
-            return res;
-        }
-        else if (inAction.type == STICKY_UPDATE_STICKER) {
-            const action = inAction as IDbStickerAction;
+        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.sticker.index);
+        //    if (sticker) {
+        //        sticker.id = action.sticker.id;
+        //        sticker.issaved = true;
+        //    }
 
-            let res: IStickyState = deepCopy(state);
+        //    return res;
+        //}
+        //else if (inAction.type == STICKY_UPDATE_STICKER) {
+        //    const action = inAction as IDbStickerAction;
 
-            let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.sticker.index);
-            if (sticker) {
-                sticker.issaved = true;
-            }
+        //    let res: IStickyState = deepCopy(state);
 
-            return res;
-        }
-        else if (inAction.type == STICKY_LOAD_STICKERS) {
-            const action = inAction as IDbStickersAction;
+        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.sticker.index);
+        //    if (sticker) {
+        //        sticker.issaved = true;
+        //    }
 
-            let res: IStickyState = deepCopy(state);
+        //    return res;
+        //}
+        //else if (inAction.type == STICKY_LOAD_STICKERS) {
+        //    const action = inAction as IDbStickersAction;
 
-            action.stickers.forEach((sticker: ISticker, index: number) => {
-                res.payload.stickers.push({
-                    index: sticker.index,
-                    id: sticker.id,
-                    date: sticker.date,
-                    x: sticker.x,
-                    y: sticker.y,
-                    title: sticker.title,
-                    note: sticker.note,
-                    color: sticker.color,
-                    issaved: true
-                });
-            });
+        //    let res: IStickyState = deepCopy(state);
+
+        //    action.stickers.forEach((sticker: ISticker, index: number) => {
+        //        res.payload.stickers.push({
+        //            index: sticker.index,
+        //            id: sticker.id,
+        //            date: sticker.date,
+        //            x: sticker.x,
+        //            y: sticker.y,
+        //            title: sticker.title,
+        //            note: sticker.note,
+        //            color: sticker.color,
+        //            issaved: true
+        //        });
+        //    });
         
-            return res;
-        }*/
+        //    return res;
+        //}
         //else
         //    return state;
     }

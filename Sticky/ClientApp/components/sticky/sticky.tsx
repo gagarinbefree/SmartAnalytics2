@@ -18,35 +18,34 @@ export interface ISticky {
 
 export interface IStickyProps {
     addSticker(index: number, top: number): void;
-    setStickerPosition(index: number, pos: IPosition): void;
-    changeStickerColor(index: number): void;
-    deleteSticker(sticker: ISticker): void;
-    changeStickerTitle(index: number, text: string): void;
-    changeStickerNote(index: number, text: string): void;
-    saveSticker(sticker: ISticker): void;
-    loadStickers(): void;
+    setStickerPosition(sticker: ISticker, pos: IPosition): void;
+    //changeStickerColor(index: number): void;
+    //deleteSticker(sticker: ISticker): void;
+    //changeStickerTitle(index: number, text: string): void;
+    //changeStickerNote(index: number, text: string): void;
+    //saveSticker(sticker: ISticker): void;
+    //loadStickers(): void;
 }
 
 export class Sticky extends React.Component<ISticky & IStickyProps> {
-    constructor(props: any) {
+    constructor(props: ISticky & IStickyProps) {
         super(props);        
     }
     
-
     render(): JSX.Element {
         return <div>
             <AddButton clickHandler={this.addButtonClickHandler.bind(this)} />
             {
-                this.props.stickers.map((sticker: ISticker) => {
+                this.props.stickers.map((sticker: ISticker, ii: number) => {
                     return <Sticker
                         sticker={sticker}
+                        num={ii}
                         key={sticker.index}
                         setPosition={this.props.setStickerPosition.bind(this)}
-                        changeColor={this.props.changeStickerColor.bind(this)}
-                        delete={this.props.deleteSticker.bind(this)}
-                        changeTitle={this.props.changeStickerTitle.bind(this)}
-                        changeNote={this.props.changeStickerNote.bind(this)}
-                        save={this.props.saveSticker.bind(this)}
+                        //delete={this.props.deleteSticker.bind(this)}
+                        //changeTitle={this.props.changeStickerTitle.bind(this)}
+                        //changeNote={this.props.changeStickerNote.bind(this)}
+                        //save={this.props.saveSticker.bind(this)}
                     />;
                 })
             }
@@ -54,7 +53,7 @@ export class Sticky extends React.Component<ISticky & IStickyProps> {
     }
 
     async componentDidMount(): Promise<void> {
-        await this.props.loadStickers();
+        //await this.props.loadStickers();
     }
 
     addButtonClickHandler(): void {
@@ -71,13 +70,13 @@ export class Sticky extends React.Component<ISticky & IStickyProps> {
 let mapDispatchToProps = (dispatch: any): IStickyProps => {
     return {
         addSticker: (index: number, top: number): void => dispatch(Actions.addSticker(index, top)),
-        setStickerPosition: (index: number, pos: IPosition): void => dispatch(Actions.setStickerPosition(index, pos)),
-        changeStickerColor: (index: number): void => dispatch(Actions.changeStickerColor(index)),
-        deleteSticker: async (sticker: ISticker): Promise<void> => dispatch(Actions.deleteSticker(sticker)),
-        changeStickerTitle: (index: number, text: string): void => dispatch(Actions.changeStickerTitle(index, text)),
-        changeStickerNote: (index: number, text: string): void => dispatch(Actions.changeStickerNote(index, text)),
-        saveSticker: async (sticker: ISticker): Promise<void> => dispatch(Actions.saveSticker(sticker)),
-        loadStickers: async (): Promise<void> => dispatch(Actions.loadStickers())
+        setStickerPosition: (sticker: ISticker, pos: IPosition): void => dispatch(Actions.setStickerPosition(sticker, pos)),
+        //changeStickerColor: (index: number): void => dispatch(Actions.changeStickerColor(index)),
+        //deleteSticker: async (sticker: ISticker): Promise<void> => dispatch(Actions.deleteSticker(sticker)),
+        //changeStickerTitle: (index: number, text: string): void => dispatch(Actions.changeStickerTitle(index, text)),
+        //changeStickerNote: (index: number, text: string): void => dispatch(Actions.changeStickerNote(index, text)),
+        //saveSticker: async (sticker: ISticker): Promise<void> => dispatch(Actions.saveSticker(sticker)),
+        //loadStickers: async (): Promise<void> => dispatch(Actions.loadStickers())
     }
 }
 

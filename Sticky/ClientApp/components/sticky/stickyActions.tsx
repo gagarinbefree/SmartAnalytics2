@@ -13,28 +13,22 @@ import {
 import { IStickyState, ISticky } from './sticky';
 import { IPosition } from '../common';
 import { func } from 'prop-types';
-import { ISticker } from '../sticker/sticker';
-
-export interface IAddStickerAction {
-    type: string,
-    index: number,
-    top: number
-}
-
-export interface ISetStickerPositionAction {
-    type: string,
-    index: number,
-    pos: IPosition
-}
+import sticker, { ISticker } from '../sticker/sticker';
 
 export interface IStickerAction {
     type: string,
     index: number
 }
 
-export interface ITextChangeStickerAction {
-    type: string,
-    index: number,
+export interface IAddStickerAction extends IStickerAction {
+    top: number
+}
+
+export interface ISetStickerPositionAction extends IStickerAction {
+    pos: IPosition
+}
+
+export interface ITextChangeStickerAction extends IStickerAction  {
     text: string,
 }
 
@@ -48,28 +42,30 @@ export interface IDbStickersAction {
     stickers: ISticker[]
 }
 
-export function addSticker(index: number, top: number): Function {
-    return (dispatch: Dispatch<IAddStickerAction>): void => {        
-        dispatch({ type: STICKY_ADD_STICKER, index: index, top: top });
-    }
+export function addSticker(index: number, top: number): IAddStickerAction {
+    return { type: STICKY_ADD_STICKER, index: index, top: top }
 }
 
-export function setStickerPosition(index: number, pos: IPosition): Function {
-    return (dispatch: Dispatch<ISetStickerPositionAction>): void => {
-        dispatch({ type: STICKY_SET_STICKER_POSITION, index: index, pos: pos });
-    }
+export function setStickerPosition(index: number, pos: IPosition): any {
+    return { type: STICKY_SET_STICKER_POSITION, index: index, pos: pos }
 }
 
-export function changeStickerColor(index: number): Function {
-    return (dispatch: Dispatch<IStickerAction>): void => {
-        dispatch({ type: STICKY_CHANGE_STICKER_COLOR, index: index });
-    }
+export function changeStickerColor(index: number): IStickerAction {
+    return { type: STICKY_CHANGE_STICKER_COLOR, index: index }
+}
+
+export function changeStickerTitle(index: number, text: string): ITextChangeStickerAction {
+    return { type: STICKY_TITLE_CHANGE, index: index, text: text }
+}
+
+export function changeStickerNote(index: number, text: string): ITextChangeStickerAction {
+    return { type: STICKY_NOTE_CHANGE, index: index, text: text }
 }
 
 export function deleteSticker(sticker: ISticker): Function {
     return async (dispatch: Dispatch<IDbStickerAction>): Promise<void> => {
         try {
-            if (sticker.id == 0) {                
+            if (sticker.id == 0) {
                 dispatch({ type: STICKY_DELETE_STICKER, sticker });
             }
             else {
@@ -82,18 +78,6 @@ export function deleteSticker(sticker: ISticker): Function {
         catch (e) {
             console.error(e);
         }
-    }
-}
-
-export function changeStickerTitle(index: number, text: string): Function {
-    return (dispatch: Dispatch<ITextChangeStickerAction>): void => {
-        dispatch({ type: STICKY_TITLE_CHANGE, index: index, text: text });
-    }
-}
-
-export function changeStickerNote(index: number, text: string): Function {
-    return (dispatch: Dispatch<ITextChangeStickerAction>): void => {
-        dispatch({ type: STICKY_NOTE_CHANGE, index: index, text: text });
     }
 }
 

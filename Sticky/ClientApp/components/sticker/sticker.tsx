@@ -16,6 +16,25 @@ import CloudDone from '@material-ui/icons/CloudDone';
 import TextareaAutosize from 'react-textarea-autosize';
 import SaveIcon from '@material-ui/icons/Save';
 import * as moment from 'moment';
+import { connect } from 'react-redux';
+import * as Actions from './stickerActions';
+
+//export interface IStickerState {
+//    type: string;
+//    payload: IStickerPayload;
+//}
+
+//export interface IStickerPayload {
+//    sticker: ISticker;
+//    classes: any;
+//    index: number;
+//}
+
+//export interface IStickerProps {
+//    setPosition(sticker: ISticker, pos: IPosition): void;
+//    changeColor(): void;
+//    init(sticker: ISticker): void;
+//}
 
 export interface ISticker {
     index: number,
@@ -82,26 +101,30 @@ const styles = (theme: Theme) => createStyles({
 
 export interface IStickerProps {
     classes: any,
+    num: number;
     sticker: ISticker,
     setPosition(index: number, pos: IPosition): void;      
-    changeColor(index: number): void;
-    delete(sticker: ISticker): void;
-    changeTitle(index: number, text: string): void;
-    changeNote(index: number, text: string): void;
-    save(sticker: ISticker): void;
+    //changeColor(index: number): void;
+    //delete(sticker: ISticker): void;
+    //changeTitle(index: number, text: string): void;
+    //changeNote(index: number, text: string): void;
+    //save(sticker: ISticker): void;
 }
 
 export class Sticker extends React.Component<IStickerProps> {
     constructor(props: IStickerProps) {
         super(props);
     }
-
     render(): JSX.Element {
+
+        debugger;
+
         const { classes } = this.props;
         const sticker: ISticker = this.props.sticker;
-
+        const position: IPosition = { x: sticker.x, y: sticker.y };
+        
         return <Draggable defaultClassName={classes.draggable}
-            defaultPosition={{ x: sticker.x, y: sticker.y }}
+            defaultPosition={position}
             onStop={this.draggableOnStopEventHandler.bind(this)}
             handle=".card-handle"
         >
@@ -159,29 +182,48 @@ export class Sticker extends React.Component<IStickerProps> {
     }
 
     draggableOnStopEventHandler(e: any, pos: DraggableData): void {
-        if (this.props.sticker.x != pos.x || this.props.sticker.y != pos.y)
-            this.props.setPosition(this.props.sticker.index, { x: pos.x, y: pos.y });
+        //if (this.props.sticker.x != pos.x || this.props.sticker.y != pos.y)
+        //    this.props.setPosition(this.props.sticker, { x: pos.x, y: pos.y });
     }
 
     cardHeaderOnClickEventHandler(): void {
-        this.props.changeColor(this.props.sticker.index);
+        //this.props.changeColor();
     }
 
     deleteButtonOnClickHandler(): void {
-        this.props.delete(this.props.sticker);
+        ///this.props.delete(this.props.sticker);
     }
 
     textFieldOnChangeHandler(e: React.ChangeEvent<HTMLInputElement>): void {
-        this.props.changeTitle(this.props.sticker.index, e.target.value);
+        //this.props.changeTitle(this.props.sticker.index, e.target.value);
     }
 
     textareaOnChangeHandler(e: React.ChangeEvent<HTMLTextAreaElement>): void {
-        this.props.changeNote(this.props.sticker.index, e.target.value);
+        //this.props.changeNote(this.props.sticker.index, e.target.value);
     }
 
     saveButtonOnClickHandler(): void {
-        this.props.save(this.props.sticker);
+        //this.props.save(this.props.sticker);
     }
 }
-        
+
+//let mapDispatchToProps = (dispatch: any): IStickerProps => {
+//    return {
+//        init: (sticker: ISticker): void => dispatch(Actions.init(sticker)),
+//        setPosition: (sticker: ISticker, pos: IPosition): void => dispatch(Actions.setPosition(sticker, pos)),
+//        changeColor: (): void => dispatch(Actions.changeColor())
+//    }
+//}
+
+//let mapStateToProps = (state: any, owner: any): IStickerPayload => {
+
+//    debugger;
+
+//    return {
+//        sticker: state.stickyReducer.payload.stickers[owner.index],
+//        classes: owner.classes
+//    }
+//}
+
 export default withStyles(styles)(Sticker);
+//export default connect(mapStateToProps, mapDispatchToProps)(Sticker);
