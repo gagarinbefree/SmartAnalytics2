@@ -100,8 +100,8 @@ const Sticker: React.SFC<IStickerProps> = (props) => {
     return <Draggable defaultClassName={classes.draggable}
         defaultPosition={position}
         onStop={(e: any, pos: DraggableData): void => {
-                if (sticker.x != pos.x || sticker.y != pos.y)
-                    props.setPosition(props.index, { x: pos.x, y: pos.y })
+            if (sticker.x != pos.x || sticker.y != pos.y)
+                props.setPosition(props.index, { x: pos.x, y: pos.y })
         }}
         handle=".card-handle"
     >

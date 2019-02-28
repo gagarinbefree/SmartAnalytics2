@@ -68,8 +68,6 @@ export const loadStickers = () => {
             let request: any = await fetch('/api/stickers/', { method: 'GET' });
             let res: ISticker[] = await request.json();
 
-
-
             dispatch({ type: STICKY_LOAD_STICKERS, stickers: res });
         }
         catch (e) {

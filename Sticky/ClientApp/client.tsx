@@ -6,11 +6,6 @@ import rootReducer from './rootReducer';
 import StickyApp from './stickyApp';
 import { applyMiddleware, createStore } from 'redux';
 
-//function configureStore(initialState: any) {
-//    return createStore(rootReducer, initialState, applyMiddleware(thunk));
-//}
-//export const store = configureStore(undefined);
-
 function configureStore(initialState: any) {
     return createStore(rootReducer, initialState, applyMiddleware(thunk));
 }
