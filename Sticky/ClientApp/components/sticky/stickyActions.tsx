@@ -10,31 +10,24 @@ import {
     STICKY_UPDATE_STICKER,
     STICKY_LOAD_STICKERS
 } from './stickyConstants';
-import { IStickyState, ISticky } from './sticky';
 import { IPosition } from '../common';
-import { func } from 'prop-types';
-import sticker, { ISticker } from '../sticker/sticker';
+import { ISticker } from '../sticker/sticker';
 
-export interface IStickerAction {
-    type: string,
-    index: number
+export interface IAddStickerAction extends Action {
 }
 
-export interface IAddStickerAction extends IStickerAction {
-    top: number
+export interface ISetPositionAction extends Action {
+    index: number;
+    position: IPosition;
 }
 
-export interface ISetStickerPositionAction extends IStickerAction {
-    pos: IPosition
+export interface IStickerAction extends Action {
+    index: number;
 }
 
-export interface ITextChangeStickerAction extends IStickerAction  {
-    text: string,
-}
-
-export interface IDbStickerAction {
-    type: string,
-    sticker: ISticker
+export interface IChangeTextAction extends Action {
+    index: number;
+    text: string;
 }
 
 export interface IDbStickersAction {
@@ -42,37 +35,60 @@ export interface IDbStickersAction {
     stickers: ISticker[]
 }
 
-export function addSticker(index: number, top: number): IAddStickerAction {
-    return { type: STICKY_ADD_STICKER, index: index, top: top }
+export function addSticker(): IAddStickerAction {
+    return { type: STICKY_ADD_STICKER }
 }
 
-export function setStickerPosition(index: number, pos: IPosition): any {
-    return { type: STICKY_SET_STICKER_POSITION, index: index, pos: pos }
+export const setStickerPosition = (index: number, position: IPosition): ISetPositionAction => {
+    return {
+        type: STICKY_SET_STICKER_POSITION,
+        index: index,
+        position: position
+    }
 }
 
-export function changeStickerColor(index: number): IStickerAction {
-    return { type: STICKY_CHANGE_STICKER_COLOR, index: index }
+export const changeStickerColor = (index: number): IStickerAction => {
+    return {
+        type: STICKY_CHANGE_STICKER_COLOR,
+        index: index
+    }
 }
 
-export function changeStickerTitle(index: number, text: string): ITextChangeStickerAction {
+export const changeStickerTitle = (index: number, text: string): IChangeTextAction => {
     return { type: STICKY_TITLE_CHANGE, index: index, text: text }
 }
 
-export function changeStickerNote(index: number, text: string): ITextChangeStickerAction {
+export const changeStickerNote = (index: number, text: string): IChangeTextAction => {
     return { type: STICKY_NOTE_CHANGE, index: index, text: text }
 }
 
-export function deleteSticker(sticker: ISticker): Function {
-    return async (dispatch: Dispatch<IDbStickerAction>): Promise<void> => {
+export const loadStickers = () => {
+    return async (dispatch: Dispatch<IDbStickersAction>): Promise<void> => {
         try {
-            if (sticker.id == 0) {
-                dispatch({ type: STICKY_DELETE_STICKER, sticker });
+            let request: any = await fetch('/api/stickers/', { method: 'GET' });
+            let res: ISticker[] = await request.json();
+
+
+
+            dispatch({ type: STICKY_LOAD_STICKERS, stickers: res });
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+}
+
+export const deleteSticker = (index: number, id: number) => {
+    return async (dispatch: Dispatch<IStickerAction>): Promise<void> => {
+        try {
+            if (id == 0) {
+                dispatch({ type: STICKY_DELETE_STICKER, index: index });
             }
             else {
-                let request: any = await fetch('/api/stickers/' + sticker.id, { method: 'DELETE' });
+                let request: any = await fetch('/api/stickers/' + id, { method: 'DELETE' });
                 await request;
 
-                dispatch({ type: STICKY_DELETE_STICKER, sticker: sticker });
+                dispatch({ type: STICKY_DELETE_STICKER, index: index });
             }
         }
         catch (e) {
@@ -81,8 +97,8 @@ export function deleteSticker(sticker: ISticker): Function {
     }
 }
 
-export function saveSticker(sticker: ISticker): Function {
-    return async (dispatch: Dispatch<IDbStickerAction>): Promise<void> => {
+export const saveSticker = (index: number, sticker: ISticker) => {
+    return async (dispatch: Dispatch<IStickerAction>): Promise<void> => {
         try {
             if (sticker.id == 0) {
                 let request: any = await fetch('/api/stickers/', {
@@ -93,9 +109,9 @@ export function saveSticker(sticker: ISticker): Function {
                     },
                     body: JSON.stringify(sticker)
                 });
-                let res: ISticker = await request.json();
+                await request.json();
 
-                dispatch({ type: STICKY_SAVE_STICKER, sticker: res });
+                dispatch({ type: STICKY_SAVE_STICKER, index: index });
             }
             else {
                 let request: any = await fetch('/api/stickers/' + sticker.id, {
@@ -108,22 +124,8 @@ export function saveSticker(sticker: ISticker): Function {
                 });
                 await request;
 
-                dispatch({ type: STICKY_UPDATE_STICKER, sticker: sticker });
+                dispatch({ type: STICKY_UPDATE_STICKER, index: index });
             }
-        }
-        catch (e) {
-            console.error(e);    
-        }
-    }
-}
-
-export function loadStickers(): Function {
-    return async (dispatch: Dispatch<IDbStickersAction>): Promise<void> => {
-        try {
-            let request: any = await fetch('/api/stickers/', { method: 'GET' });
-            let res: ISticker[] = await request.json();
-
-            dispatch({ type: STICKY_LOAD_STICKERS, stickers: res });
         }
         catch (e) {
             console.error(e);

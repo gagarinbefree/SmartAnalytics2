@@ -39,7 +39,8 @@ namespace AccessLayer.Ef
                     .HasColumnName("date")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.Index).HasColumnName("index");
+                entity.Property(e => e.Num)
+                    .HasColumnName("num");
 
                 entity.Property(e => e.Note)
                     .HasColumnName("note")
@@ -51,9 +52,11 @@ namespace AccessLayer.Ef
                     .HasMaxLength(255)
                     .IsUnicode(true);
 
-                entity.Property(e => e.X).HasColumnName("x");
+                entity.Property(e => e.X)
+                    .HasColumnName("x");
 
-                entity.Property(e => e.Y).HasColumnName("y");
+                entity.Property(e => e.Y)
+                    .HasColumnName("y");
             });
         }
     }

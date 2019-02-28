@@ -24,7 +24,10 @@ namespace Sticky.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sticker>>> GetSticker()
         {
-            var stickers = await _context.Sticker.ToListAsync();
+            var stickers = await _context
+                .Sticker
+                .OrderBy(f => f.Num)
+                .ToListAsync();
 
             return stickers;
         }
@@ -87,7 +90,10 @@ namespace Sticky.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Sticker>> DeleteSticker(int id)
         {
-            var sticker = await _context.Sticker.FindAsync(id);
+            var sticker = await _context
+                .Sticker
+                .FindAsync(id);
+
             if (sticker == null)
             {
                 return NotFound();
@@ -101,7 +107,9 @@ namespace Sticky.Controllers
 
         private bool StickerExists(int id)
         {
-            return _context.Sticker.Any(e => e.Id == id);
+            return _context
+                .Sticker
+                .Any(e => e.Id == id);
         }
     }
 }

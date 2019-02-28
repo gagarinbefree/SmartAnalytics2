@@ -12,6 +12,6 @@ namespace AccessLayer.Ef
         public string Title { get; set; }
         public string Note { get; set; }
         public string Color { get; set; }
-        public int Index { get; set; }
+        public int Num { get; set; }
     }
 }

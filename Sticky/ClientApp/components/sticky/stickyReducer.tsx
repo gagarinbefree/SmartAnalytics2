@@ -1,4 +1,4 @@
-﻿import { IStickyState } from "./sticky";
+﻿import { IStickyState } from './sticky';
 import {
     STICKY_ADD_STICKER,
     STICKY_SET_STICKER_POSITION,
@@ -8,163 +8,92 @@ import {
     STICKY_NOTE_CHANGE,
     STICKY_SAVE_STICKER,
     STICKY_UPDATE_STICKER,    STICKY_LOAD_STICKERS} from "./stickyConstants";
-import { Action, Reducer } from 'redux';
-import { IAddStickerAction, ISetStickerPositionAction, IStickerAction, ITextChangeStickerAction, IDbStickerAction, IDbStickersAction } from "./stickyActions";
+import { getCardColor } from '../common';
+import produce from 'immer';
+import * as _ from 'lodash';
+import { Action } from 'redux';
 import { ISticker } from "../sticker/sticker";
-import { getCardColor } from "../common";
-import produce from "immer";
+import { ISetPositionAction, IStickerAction, IChangeTextAction, IDbStickersAction } from './stickyActions';
 
 export const initSticky: IStickyState = {
     type: '',
     payload: {
-        stickers: new Array<ISticker>()
+        lastnum: 0,
+        stickers: [] as ISticker[]
     }
 }
 
-export const stickyReducer: Reducer<IStickyState> = (state: IStickyState = initSticky, inAction: Action): IStickyState =>
-    produce(state, draft => {    
-        if (inAction.type == STICKY_ADD_STICKER) {
-            const action = inAction as IAddStickerAction;
-
-            draft.payload.stickers.push({
-                index: action.index,
-                id: 0,
-                date: new Date(),
-                x: 0,
-                y: action.top,
-                title: '',
-                note: '',
-                color: getCardColor(),
-                issaved: false
-            });
-        }
-        //else if (inAction.type == STICKY_SET_STICKER_POSITION) {
-        //    const action = inAction as ISetStickerPositionAction;
-
-        //    draft.payload.stickers
-
-        //    let res: IStickyState = deepCopy(state);
-
-        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
-        //    if (sticker) {
-        //        sticker.x = action.pos.x;
-        //        sticker.y = action.pos.y;
-        //        sticker.issaved = false;
-        //    }
-
-        //    return res;
-        //}
-        //else if (inAction.type == STICKY_CHANGE_STICKER_COLOR) {
-        //    const action = inAction as IStickerAction;
-
-        //    let res: IStickyState = deepCopy(state);
-
-        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
-        //    if (sticker) {
-        //        sticker.color = getCardColor(sticker.color);
-        //        sticker.issaved = false;
-        //    }
-
-        //    return res;
-        //}
-        //else if (inAction.type == STICKY_DELETE_STICKER) {
-        //    const action = inAction as IDbStickerAction;
-
-        //    let res: IStickyState = deepCopy(state);
-
-        //    let ii: number = res.payload.stickers.findIndex(item => item.index == action.sticker.index);
-        //    if (ii >= 0) {
-        //        res.payload.stickers.splice(ii, 1);          
-        //    } 
-
-        //    return res;
-        //}
-        //else if (inAction.type == STICKY_TITLE_CHANGE) {
-        //    const action = inAction as ITextChangeStickerAction;
-
-        //    let res: IStickyState = deepCopy(state);
-
-        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
-        //    if (sticker) {
-        //        sticker.title = action.text;
-        //        sticker.issaved = false;
-        //    }
-
-        //    return res;
-        //}
-        //else if (inAction.type == STICKY_NOTE_CHANGE) {
-        //    const action = inAction as ITextChangeStickerAction;
-
-        //    let res: IStickyState = deepCopy(state);
-
-        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.index);
-        //    if (sticker) {
-        //        sticker.note = action.text;
-        //        sticker.issaved = false;
-        //    }
-
-        //    return res;
-        //}
-        //else if (inAction.type == STICKY_SAVE_STICKER) {
-        //    const action = inAction as IDbStickerAction;
-
-        //    let res: IStickyState = deepCopy(state);
-
-        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.sticker.index);
-        //    if (sticker) {
-        //        sticker.id = action.sticker.id;
-        //        sticker.issaved = true;
-        //    }
-
-        //    return res;
-        //}
-        //else if (inAction.type == STICKY_UPDATE_STICKER) {
-        //    const action = inAction as IDbStickerAction;
-
-        //    let res: IStickyState = deepCopy(state);
-
-        //    let sticker: ISticker | undefined = res.payload.stickers.find(item => item.index == action.sticker.index);
-        //    if (sticker) {
-        //        sticker.issaved = true;
-        //    }
-
-        //    return res;
-        //}
-        //else if (inAction.type == STICKY_LOAD_STICKERS) {
-        //    const action = inAction as IDbStickersAction;
-
-        //    let res: IStickyState = deepCopy(state);
-
-        //    action.stickers.forEach((sticker: ISticker, index: number) => {
-        //        res.payload.stickers.push({
-        //            index: sticker.index,
-        //            id: sticker.id,
-        //            date: sticker.date,
-        //            x: sticker.x,
-        //            y: sticker.y,
-        //            title: sticker.title,
-        //            note: sticker.note,
-        //            color: sticker.color,
-        //            issaved: true
-        //        });
-        //    });
-        
-        //    return res;
-        //}
-        //else
-        //    return state;
+// immer - immutable state (https://github.com/mweststrate/immer)
+const stickyReducer = (state: IStickyState = initSticky, action: Action) => produce(state, draft => {
+    if (action.type == STICKY_ADD_STICKER) {
+        draft.payload.lastnum++;
+        draft.payload.stickers.push({
+            num: draft.payload.lastnum,
+            id: 0,
+            date: new Date(),
+            x: 0,
+            y: getHeight(state.payload.stickers),
+            title: '',
+            note: '',
+            color: getCardColor(),
+            isnotsaved: true
+        })
     }
-);
+    else if (action.type == STICKY_SET_STICKER_POSITION) {
+        const act = action as ISetPositionAction;
 
-function deepCopy(state: IStickyState): IStickyState {
-    let res: IStickyState = {
-        type: state.type,
-        payload: {
-            stickers: state.payload.stickers.slice()
-        }
+        draft.payload.stickers[act.index].x = act.position.x;
+        draft.payload.stickers[act.index].y = act.position.y;
+        draft.payload.stickers[act.index].isnotsaved = true;
     }
+    else if (action.type == STICKY_CHANGE_STICKER_COLOR) {
+        const act = action as IStickerAction;
 
-    return res;
+        draft.payload.stickers[act.index].color = getCardColor(draft.payload.stickers[act.index].color);
+        draft.payload.stickers[act.index].isnotsaved = true;
+    }
+    else if (action.type == STICKY_TITLE_CHANGE) {
+        const act = action as IChangeTextAction;
+
+        draft.payload.stickers[act.index].title = act.text;
+        draft.payload.stickers[act.index].isnotsaved = true;
+    }
+    else if (action.type == STICKY_NOTE_CHANGE) {
+        const act = action as IChangeTextAction;
+
+        draft.payload.stickers[act.index].note = act.text;
+        draft.payload.stickers[act.index].isnotsaved = true;
+    }
+    else if (action.type == STICKY_DELETE_STICKER) {
+        const act = action as IStickerAction;
+
+        draft.payload.stickers.splice(act.index, 1);
+    }
+    else if (action.type == STICKY_SAVE_STICKER) {
+        const act = action as IStickerAction;
+
+        draft.payload.stickers[act.index].isnotsaved = false;
+    }
+    else if (action.type == STICKY_UPDATE_STICKER) {
+        const act = action as IStickerAction;
+
+        draft.payload.stickers[act.index].isnotsaved = false;
+    }
+    else if (action.type == STICKY_LOAD_STICKERS) {
+        const act = action as IDbStickersAction;
+
+        draft.payload.lastnum = getNum(act.stickers);
+        draft.payload.stickers = act.stickers;
+    }
+})
+
+const getHeight = (stickers: ISticker[]): number => {
+    let max: ISticker | undefined = _.maxBy(stickers, 'y');
+    return max ? max.y + 200 : 0;
 }
 
-export default stickyReducer;
+const getNum = (stickers: ISticker[]): number => {
+    return stickers.length != 0 ? stickers[stickers.length - 1].num : 0;
+}
+
+export default stickyReducer

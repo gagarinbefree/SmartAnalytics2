@@ -20,4 +20,4 @@ const AddButton: React.SFC<any> = (props) => {
     </Fab>;
 }
 
-export default withStyles(styles)(AddButton);
+export default withStyles(styles)(AddButton)
