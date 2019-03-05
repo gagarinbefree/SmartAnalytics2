@@ -2,14 +2,6 @@
 import Sticky from './components/sticky/sticky';
 import './site.css';
 
-export default class BeltStockApp extends React.Component {
-    constructor(props: any) {
-        super(props);
-    }
+const StickyApp: React.SFC<any> = (props) => <div><Sticky /></div>
 
-    render(): JSX.Element {
-        return <div>
-            <Sticky />
-        </div>
-    }
-}
+export default StickyApp
